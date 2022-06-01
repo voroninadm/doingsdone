@@ -29,13 +29,15 @@ function esc ($string) {
 /**
  * check time to project deadline
  * @param int DEADLINE - time in hours to make it sensitive
+ * @param int SECONDS_IN_HOUR - convert seconds to hours
  * @return boolean if $date is set or
  * @return null
  */
 function get_hours_to_deadline($date) {
     if ($date) {
         define('DEADLINE', '24');
-        $diff = floor((strtotime($date) - time()) / 60 * 60);
+        define('SECONDS_IN_HOUR', 3600);
+        $diff = floor((strtotime($date) - time()) / SECONDS_IN_HOUR );
         return ($diff < DEADLINE);
     }
 
