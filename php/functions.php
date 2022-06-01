@@ -14,4 +14,27 @@ function get_project_tasks (array $tasks, $project) {
         }
     }
     return $count;
+};
+
+/**
+ * prevent XSS
+ * @param string $string - input from user
+ * @return string
+ */
+function esc ($string) {
+    return htmlspecialchars($string);
+};
+
+
+/**
+ * check time to project deadline
+ */
+function get_hours_to_deadline($date) {
+    if ($date) {
+        define('DEADLINE', '24');
+        $diff = floor((strtotime($date) - time()) / 60 * 60);
+        return ($diff < DEADLINE);
+    }
+
+    return null;
 }
