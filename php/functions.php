@@ -28,6 +28,9 @@ function esc ($string) {
 
 /**
  * check time to project deadline
+ * @param int DEADLINE - time in hours to make it sensitive
+ * @return boolean if $date is set or
+ * @return null
  */
 function get_hours_to_deadline($date) {
     if ($date) {
