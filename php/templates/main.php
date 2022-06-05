@@ -4,13 +4,13 @@
 
     <nav class="main-navigation">
       <ul class="main-navigation__list">
-        <?php foreach ($projects as $key => $value) : ?>
+        <?php foreach ($projects as $project) : ?>
         <li class="main-navigation__list-item">
           <a class="main-navigation__list-item-link" href="#">
-            <?= esc($value) ?>
+            <?= esc($project['name']) ?>
           </a>
           <span class="main-navigation__list-item-count">
-            <?= esc(get_project_tasks($tasks, $value)) ?>
+            <?= esc($project['count_tasks']) ?>
           </span>
         </li>
         <? endforeach ?>
@@ -45,12 +45,8 @@
 
     <table class="tasks">
       <?php foreach ($tasks as $task) : ?>
-      <?php if (!$show_complete_tasks && $task['ready']) {
-                        continue;
-                    } ?>
-      <tr class="tasks__item task
-        <?= $task['ready'] ? 'task--completed' : ''; ?>
-        <?= get_hours_to_deadline($task['date']) ? 'task--important' : ''; ?> ">
+        <?php if (!$show_complete_tasks && $task['is_complete']) : continue; endif; ?>
+            <tr class="tasks__item task <?= $task['is_complete'] ? 'task--completed' : ''; ?> <?= get_hours_to_deadline($task['deadline']) ? 'task--important' : ''; ?>">
         <td class="task__select">
           <label class="checkbox task__checkbox">
             <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
@@ -65,7 +61,7 @@
         </td>
 
         <td class="task__date">
-          <?= esc($task['date']) ?>
+          <?= date('d.m.Y', strtotime(esc($task['deadline']))) ?>
         </td>
       </tr>
       <? endforeach ?>
