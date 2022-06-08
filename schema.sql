@@ -32,7 +32,7 @@ CREATE TABLE task (
   name VARCHAR(128) NOT NULL,
   is_complete BOOLEAN DEFAULT 0,
   file_url VARCHAR(255) NULL DEFAULT NULL,
-  deadline TIMESTAMP,
+  deadline TIMESTAMP DEFAULT NULL,
   project_id INT NOT NULL,
   user_id INT NOT NULL,
 

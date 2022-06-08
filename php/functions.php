@@ -43,3 +43,26 @@ function get_hours_to_deadline($date) {
 
     return null;
 }
+
+
+function count_str_length($string, $min, $max) {
+    if ($string) {
+        $len = strlen($string);
+        if ($len >= $min and $len <= $max) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * проверка даты. Дата должна быть больше или роавна текущей в формате Y-m-d
+ *
+ * @param  string $date
+ * @return bool
+ */
+function check_correct_date($date)
+{
+    return date('Y-m-d', strtotime($date)) >= date('Y-m-d');
+}
+

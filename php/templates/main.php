@@ -1,24 +1,7 @@
 <div class="content">
-  <section class="content__side">
-    <h2 class="content__side-heading">Проекты</h2>
 
-    <nav class="main-navigation">
-      <ul class="main-navigation__list">
-        <?php foreach ($projects as $project) : ?>
-        <li class="main-navigation__list-item">
-          <a class="main-navigation__list-item-link" href="#">
-            <?= esc($project['name']) ?>
-          </a>
-          <span class="main-navigation__list-item-count">
-            <?= esc($project['count_tasks']) ?>
-          </span>
-        </li>
-        <? endforeach ?>
-      </ul>
-    </nav>
-
-    <a class="button button--transparent button--plus content__side-button" href="pages/form-project.html" target="project_add">Добавить проект</a>
-  </section>
+    <!-- include projects-nav component -->
+    <?= include_component('projects-nav.php', ['projects' => $projects]); ?>
 
   <main class="content__main">
     <h2 class="content__main-heading">Список задач</h2>
@@ -57,7 +40,7 @@
         </td>
 
         <td class="task__file">
-          <a class="download-link" href="#">Home.psd</a>
+          <a class="download-link" href="<?= $task['file_url'] ?>"><?= $task['file_url'] ?></a>
         </td>
 
         <td class="task__date">
@@ -66,6 +49,7 @@
       </tr>
       <? endforeach ?>
       <?php if ($show_complete_tasks):?>
+
       <tr class="tasks__item task task--completed">
         <td class="task__select">
           <label class="checkbox task__checkbox">
@@ -78,6 +62,7 @@
         <td class="task__controls">
         </td>
       </tr>
+
       <? endif; ?>
     </table>
   </main>
