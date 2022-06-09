@@ -161,7 +161,7 @@ function check_registrated_user_email($conn, $email)
         return (bool) mysqli_fetch_assoc($result);
     }
 
-    show_error('check_registrated_user_email ' . mysqli_error($con));
+    show_error('check_registrated_user_email ' . mysqli_error($conn));
 }
 
 function add_new_user($conn, $email, $password, $login) {
@@ -173,3 +173,17 @@ function add_new_user($conn, $email, $password, $login) {
         show_error('add_new_user', mysqli_error($conn));
     }
 }
+
+//===== auth
+
+function check_exist_user($conn, $email) {
+    $sql = "SELECT * FROM user WHERE email = '$email'";
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        show_error('check_exist_user' . mysqli_error($conn));
+        exit();
+    }
+    return mysqli_fetch_assoc($result);
+}
+

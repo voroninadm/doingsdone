@@ -6,14 +6,14 @@
     <title>Дела в порядке | <?= $page_title ?></title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
-    <?= $user ?? '<link rel="stylesheet" href="css/flatpickr.min.css">' ?>
+    <?= $user ? '<link rel="stylesheet" href="css/flatpickr.min.css">' : '' ?>
 </head>
 
-<body <?= !$user ?? 'class="body-background"' ?>>
+<body <?= !$user ? 'class="body-background"' : '' ?>>
 <h1 class="visually-hidden"><?= $page_title ?></h1>
 
 <div class="page-wrapper">
-    <div class="container <?= $user ?? 'container--with-sidebar' ?>" >
+    <div class="container <?= $user ? 'container--with-sidebar' : ''?>" >
         <header class="main-header">
             <a href="/">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
@@ -22,15 +22,16 @@
             <div class="main-header__side">
                 <?php if ($user) :?>
                 <a class="main-header__side-item button button--plus open-modal" href="add-task.php">Добавить задачу</a>
-                <?php else : ?>
-                <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a>
-                <? endif; ?>
-                <div class="main-header__side-item user-menu">
-                    <div class="user-menu__data">
-                        <p><?= $user_name['login'] ?></p>
-                        <a href="#">Выйти</a>
+                    <div class="main-header__side-item user-menu">
+                        <div class="user-menu__data">
+
+                            <p><?= $user_name['login'] ?></p>
+                            <a href="#">Выйти</a>
+                        </div>
                     </div>
-                </div>
+                <?php else : ?>
+                <a class="main-header__side-item button button--transparent" href="auth.php">Войти</a>
+                <? endif; ?>
             </div>
         </header>
 
@@ -46,9 +47,9 @@
 
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
-        <?= $user ??
-        '<a class="main-footer__button button button--plus" href="add-task.php">Добавить задачу</a>'
-        ?>
+        <?php if ($user) : ?>
+        <a class="main-footer__button button button--plus" href="add-task.php">Добавить задачу</a>'
+        <? endif; ?>
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
             <a class="social__link social__link--facebook" href="#">

@@ -2,6 +2,9 @@
 
 require_once 'php/init.php';
 
+$user_id = 1;
+$user_name = get_username($conn, $user_id);
+
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -45,13 +48,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // rendering to page
 
-//layout to main page with main page template
-$main_layout = include_template('registration.php', [
+$content = include_template('registration.php', [
     'errors' => $errors,
     'email' => $email ?? null,
     'password' => $password ?? null,
     'login' => $login ?? null
+]);
 
+//layout to main page with main page template
+$main_layout = include_template('layout.php', [
+    'content' => $content,
+    'user_name' => $user_name,
+    'user' => ''
 ]);
 
 print($main_layout);

@@ -35,7 +35,8 @@ if ($project_id && !check_user_project_id($conn, $project_id, $user_id)) {
 $main_layout = include_template('layout.php', [
     'page_title' => 'Дела в порядке',
     'user_name' => $user_name,
-    'content' => $content
+    'content' => $content,
+    'user' => '...'
 ]);
 
 print($main_layout);
