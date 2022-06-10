@@ -2,6 +2,9 @@
         <h2 class="content__side-heading">Проекты</h2>
 <nav class="main-navigation">
   <ul class="main-navigation__list">
+      <?php if (empty($projects)) : ?>
+      <p>У Вас еще нет проектов</p>
+      <? endif; ?>
     <?php foreach ($projects as $project) : ?>
     <li class="main-navigation__list-item <?= $project['id'] == $project_id ? 'main-navigation__list-item--active' : ''; ?>">
       <a class="main-navigation__list-item-link" href="index.php?project_id=<?= $project['id']; ?>">
@@ -14,5 +17,5 @@
     <? endforeach ?>
   </ul>
 </nav>
-<a class="button button--transparent button--plus content__side-button" href="form-project.html">Добавить проект</a>
+<a class="button button--transparent button--plus content__side-button" href="add-project.php">Добавить проект</a>
       </section>

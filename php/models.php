@@ -21,7 +21,7 @@ function get_projects ($conn, $user_id) {
     $sql = "SELECT id, name,
               (SELECT COUNT(id) FROM task WHERE user_id = $user_id AND project_id = p.id) count_tasks
               FROM project p
-              WHERE user_id = $user_id";
+              WHERE user_id = $user_id ORDER BY name ";
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {
@@ -138,6 +138,7 @@ function check_user_id($conn, $user_id)
     show_error(mysqli_error($conn));
 }
 
+//===== adding
 
 function add_new_task($conn, $task_name, $file_url, $deadline, $project_id, $user_id) {
     $sql = "INSERT INTO task (name, file_url, deadline, project_id, user_id) VALUES (?, ?, ?, ?, ?)";
@@ -146,6 +147,16 @@ function add_new_task($conn, $task_name, $file_url, $deadline, $project_id, $use
 
     if (!$result) {
         show_error('add_new_task ' . mysqli_error($conn));
+    }
+}
+
+function add_new_project($conn, $project_name, $user_id) {
+    $sql = "INSERT INTO project (name, user_id) VALUES (?, ?)";
+    $stmt = db_get_prepare_stmt($conn, $sql, [$project_name, $user_id]);
+    $result = mysqli_stmt_execute($stmt);
+
+    if (!$result) {
+        show_error('add_new_project ' . mysqli_error($conn));
     }
 }
 
@@ -170,7 +181,7 @@ function add_new_user($conn, $email, $password, $login) {
     $result = mysqli_stmt_execute($stmt);
 
     if (!$result) {
-        show_error('add_new_user', mysqli_error($conn));
+        show_error('add_new_user ', mysqli_error($conn));
     }
 }
 
@@ -181,7 +192,7 @@ function check_exist_user($conn, $email) {
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {
-        show_error('check_exist_user' . mysqli_error($conn));
+        show_error('check_exist_user ' . mysqli_error($conn));
         exit();
     }
     return mysqli_fetch_assoc($result);
@@ -203,5 +214,16 @@ function get_search_results($conn, $search)
     }
 
     show_error('get_search_results ' . mysqli_error($conn));
+}
+
+function check_exist_user_project ($conn, $user_id, $project_name) {
+    $project_name = mysqli_real_escape_string($conn, $project_name);
+    $sql = "SELECT * FROM project WHERE user_id = '$user_id' AND name = '$project_name'";
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        show_error('check_exist_user_project ' . mysqli_error($conn));
+    }
+    return (bool) mysqli_fetch_assoc($result);
 }
 

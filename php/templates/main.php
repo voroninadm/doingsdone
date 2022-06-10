@@ -27,9 +27,13 @@
     </div>
 
     <table class="tasks">
-        <?php if (!$tasks) : ?>
+
+        <?php if(!$tasks && !$search) : ?>
+        <span>У вас еще нет ни одной задачи</span>
+        <? elseif (!$tasks && $search) : ?>
         <span>Ничего не найдено по вашему запросу</span>
         <? endif; ?>
+
       <?php foreach ($tasks as $task) : ?>
         <?php if ($task['is_complete']) : continue; endif; ?>
             <tr class="tasks__item task <?= $task['is_complete'] ? 'task--completed' : ''; ?> <?= get_hours_to_deadline($task['deadline']) ? 'task--important' : ''; ?>">

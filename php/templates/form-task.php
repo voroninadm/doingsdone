@@ -69,7 +69,7 @@
         </form>
 
         <?php else : ?>
-            <p>Сперва добавьте проект, в который будут добавляться задачи. Например "Ремонт квартиры".</p>
+            <p>Сначала добавьте проект, а потом в него можно добавить задачи.</p>
             <a class="button button--transparent button--plus content__side-button" href="add-project.php">Добавить проект</a>
         <?php endif; ?>
 

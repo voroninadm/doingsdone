@@ -39,7 +39,8 @@ if ($project_id && !check_user_project_id($conn, $project_id, $user_id)) {
     $content = include_template('main.php', [
         'projects' => $projects,
         'tasks' => $tasks,
-        'project_id' => $project_id
+        'project_id' => $project_id,
+        'search' => $search ?? null
     ]);
 };
 
