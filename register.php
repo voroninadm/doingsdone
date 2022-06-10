@@ -2,9 +2,6 @@
 
 require_once 'php/init.php';
 
-$user_id = 1;
-$user_name = get_username($conn, $user_id);
-
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -40,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $password = password_hash($password, PASSWORD_DEFAULT);
         add_new_user($conn, $email, $password, $login);
 
-        header('Location: index.php');
+        header('Location: auth.php');
         exit();
     }
 }
@@ -58,8 +55,7 @@ $content = include_template('registration.php', [
 //layout to main page with main page template
 $main_layout = include_template('layout.php', [
     'content' => $content,
-    'user_name' => $user_name,
-    'user' => ''
+    'current_user' => $current_user
 ]);
 
 print($main_layout);

@@ -65,4 +65,3 @@ function check_correct_date($date)
 {
     return date('Y-m-d', strtotime($date)) >= date('Y-m-d');
 }
-

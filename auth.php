@@ -2,8 +2,6 @@
 
 require_once 'php/init.php';
 
-$user_name = get_username($conn, 1);
-
 
 $errors = [];
 
@@ -34,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user;
         } else {
-            $errors['password'] = "Пароли не совпадают";
+            $errors['password'] = "Неправильный пароль";
         }
     }
 
@@ -54,8 +52,7 @@ $content = include_template('authorization.php', [
 //layout to main page with main page template
 $main_layout = include_template('layout.php', [
     'content' => $content,
-    'user_name' => $user_name,
-    'user' => ''
+    'current_user' => $current_user
 ]);
 
 print($main_layout);

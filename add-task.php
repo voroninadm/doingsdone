@@ -2,9 +2,15 @@
 
 require_once 'php/init.php';
 
+//check user is auth
+if (!isset($_SESSION['user'])) {
+    header("Location: /guest.php");
+    exit();
+}
+
 // start configs
-$user_id = 1;
-$user_name = get_username($conn, $user_id);
+$user_name = $_SESSION['user'];
+$user_id = $user_name['id'];
 $projects = get_projects($conn, $user_id);
 
 $errors = [];
@@ -71,7 +77,7 @@ $content = include_template('form-task.php', [
 //layout to main page with main page template
 $main_layout = include_template('layout.php', [
     'page_title' => 'Дела в порядке',
-    'user_name' => $user_name,
+    'current_user' => $current_user,
     'content' => $content
 ]);
 

@@ -6,8 +6,8 @@
   <main class="content__main">
     <h2 class="content__main-heading">Список задач</h2>
 
-    <form class="search-form" action="index.php" method="post" autocomplete="off">
-      <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
+    <form class="search-form" action="" method="GET" autocomplete="off">
+      <input class="search-form__input" type="text" name="search" value="" placeholder="Поиск по задачам">
 
       <input class="search-form__submit" type="submit" name="" value="Искать">
     </form>
@@ -21,14 +21,17 @@
       </nav>
 
       <label class="checkbox">
-        <input class="checkbox__input visually-hidden show_completed" type="checkbox" <?=$show_complete_tasks ? 'checked' : '' ?>>
+        <input class="checkbox__input visually-hidden show_completed" type="checkbox">
         <span class="checkbox__text">Показывать выполненные</span>
       </label>
     </div>
 
     <table class="tasks">
+        <?php if (!$tasks) : ?>
+        <span>Ничего не найдено по вашему запросу</span>
+        <? endif; ?>
       <?php foreach ($tasks as $task) : ?>
-        <?php if (!$show_complete_tasks && $task['is_complete']) : continue; endif; ?>
+        <?php if ($task['is_complete']) : continue; endif; ?>
             <tr class="tasks__item task <?= $task['is_complete'] ? 'task--completed' : ''; ?> <?= get_hours_to_deadline($task['deadline']) ? 'task--important' : ''; ?>">
         <td class="task__select">
           <label class="checkbox task__checkbox">
@@ -48,22 +51,6 @@
         </td>
       </tr>
       <? endforeach ?>
-      <?php if ($show_complete_tasks):?>
-
-      <tr class="tasks__item task task--completed">
-        <td class="task__select">
-          <label class="checkbox task__checkbox">
-            <input class="checkbox__input visually-hidden" type="checkbox" checked>
-            <span class="checkbox__text">Записаться на профессию PHP"</span>
-          </label>
-        </td>
-        <td class="task__date">30.05.2022</td>
-
-        <td class="task__controls">
-        </td>
-      </tr>
-
-      <? endif; ?>
     </table>
   </main>
 </div>

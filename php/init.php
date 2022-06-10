@@ -5,7 +5,13 @@ require_once 'php/configs.php';
 require_once 'php/functions.php';
 require_once 'php/models.php';
 
-$show_complete_tasks = rand(0, 1);
+//start session if auth is complete
+session_start();
+$current_user = $_SESSION['user'] ?? NULL;
+
+define('CACHE_DIR', basename(__DIR__ . DIRECTORY_SEPARATOR . 'cache'));
+define('UPLOAD_PATH', basename(__DIR__ . DIRECTORY_SEPARATOR . 'uploads'));
+
 
 $db_cfg = array_values($db);
 $conn = mysqli_connect(...$db_cfg);

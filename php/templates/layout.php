@@ -6,27 +6,27 @@
     <title>Дела в порядке | <?= $page_title ?></title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
-    <?= $user ? '<link rel="stylesheet" href="css/flatpickr.min.css">' : '' ?>
+    <?= $current_user ? '<link rel="stylesheet" href="css/flatpickr.min.css">' : '' ?>
 </head>
 
-<body <?= !$user ? 'class="body-background"' : '' ?>>
+<body <?= !$current_user ? 'class="body-background"' : '' ?>>
 <h1 class="visually-hidden"><?= $page_title ?></h1>
 
 <div class="page-wrapper">
-    <div class="container <?= $user ? 'container--with-sidebar' : ''?>" >
+    <div class="container <?= $current_user ? 'container--with-sidebar' : ''?>" >
         <header class="main-header">
             <a href="/">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
 
             <div class="main-header__side">
-                <?php if ($user) :?>
+                <?php if (isset($current_user)) :?>
                 <a class="main-header__side-item button button--plus open-modal" href="add-task.php">Добавить задачу</a>
                     <div class="main-header__side-item user-menu">
                         <div class="user-menu__data">
 
-                            <p><?= $user_name['login'] ?></p>
-                            <a href="#">Выйти</a>
+                            <p><?= $current_user['login'] ?></p>
+                            <a href="logout.php">Выйти</a>
                         </div>
                     </div>
                 <?php else : ?>
@@ -47,7 +47,7 @@
 
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
-        <?php if ($user) : ?>
+        <?php if (isset($current_user)) : ?>
         <a class="main-footer__button button button--plus" href="add-task.php">Добавить задачу</a>'
         <? endif; ?>
         <div class="main-footer__social social">
