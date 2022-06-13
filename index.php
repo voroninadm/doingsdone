@@ -7,13 +7,14 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-//get project_id
-$project_id = filter_input(INPUT_GET, 'project_id');
-
 $user_name = $_SESSION['user'];
 $user_id = $user_name['id'];
-$projects = get_projects($conn, $user_id);
-// $tasks = get_user_tasks($conn, $user_id);
+$projects = get_current_projects($conn, $user_id);
+$show_completed_tasks = filter_input(INPUT_GET, 'show_completed', FILTER_SANITIZE_NUMBER_INT);
+
+
+//get project_id
+$project_id = filter_input(INPUT_GET, 'project_id');
 
 if ($project_id && check_user_project_id($conn, $project_id,$user_id)) {
     $tasks = get_project_user_tasks($conn, $user_id, $project_id);
@@ -28,6 +29,24 @@ if ($search) {
     $tasks = get_search_results($conn, $search);
 }
 
+//tasks
+
+$task_id = filter_input(INPUT_GET, 'task_id', FILTER_SANITIZE_NUMBER_INT);
+$task_check = filter_input(INPUT_GET, 'check', FILTER_SANITIZE_NUMBER_INT);
+
+if ($task_id && check_exist_task_id($conn, $task_id, $user_id)) {
+    if ($task_check) {
+        complete_task($conn, $task_id);
+        header('Location: index.php');
+    } else {
+        remove_complete_task($conn, $task_id);
+        header('Location: index.php');
+    }
+}
+
+if (!$show_completed_tasks) {
+    $tasks = get_user_no_completed_tasks($tasks);
+}
 
 // rendering to page
 if ($project_id && !check_user_project_id($conn, $project_id, $user_id)) {
@@ -40,7 +59,8 @@ if ($project_id && !check_user_project_id($conn, $project_id, $user_id)) {
         'projects' => $projects,
         'tasks' => $tasks,
         'project_id' => $project_id,
-        'search' => $search ?? null
+        'search' => $search ?? null,
+        'show_completed_tasks' => $show_completed_tasks
     ]);
 };
 

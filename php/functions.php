@@ -28,17 +28,15 @@ function esc ($string) {
 
 /**
  * check time to project deadline
- * @param int DEADLINE - time in hours to make it sensitive
- * @param int SECONDS_IN_HOUR - convert seconds to hours
- * @return boolean if $date is set or
+ * @param int 24 - time in hours to make it sensitive
+ * @param int 3600 - convert seconds to hours
+ * @return boolean if $date is set +or
  * @return null
  */
 function get_hours_to_deadline($date) {
     if ($date) {
-        define('DEADLINE', '24');
-        define('SECONDS_IN_HOUR', 3600);
-        $diff = floor((strtotime($date) - time()) / SECONDS_IN_HOUR );
-        return ($diff < DEADLINE);
+        $diff = floor((strtotime($date) - time()) / 3600 );
+        return ($diff < 24);
     }
 
     return null;
@@ -64,4 +62,17 @@ function count_str_length($string, $min, $max) {
 function check_correct_date($date)
 {
     return date('Y-m-d', strtotime($date)) >= date('Y-m-d');
+}
+
+function get_user_no_completed_tasks($tasks)
+{
+    $no_completed_tasks = [];
+
+    foreach($tasks as $task) {
+        if (!$task['is_complete']) {
+            $no_completed_tasks[] = $task;
+        }
+    }
+
+    return $no_completed_tasks;
 }

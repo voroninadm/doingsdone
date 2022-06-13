@@ -14,7 +14,8 @@ function show_error($error)
 }
 
 
-// запрос для получения списка проектов у текущего пользователя.
+// запрос для получения списка проектов у текущего пользователя
+// где все таски.
 
 function get_projects ($conn, $user_id) {
     $user_id = intval($user_id);
@@ -32,6 +33,24 @@ function get_projects ($conn, $user_id) {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 };
 
+// запрос для получения списка актуальных проектов у текущего пользователя
+// где только актуальные таски (is_complete = 0).
+
+function get_current_projects ($conn, $user_id) {
+    $user_id = intval($user_id);
+    $sql = "SELECT id, name,
+              (SELECT COUNT(id) FROM task WHERE user_id = $user_id AND is_complete = 0 AND project_id = p.id) count_tasks
+              FROM project p
+              WHERE user_id = $user_id ORDER BY name ";
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        show_error(mysqli_error($conn));
+    }
+
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+};
+
 // запрос для получения списка из всех задач у текущего пользователя.
 
 function get_user_tasks($conn, $user_id)
@@ -41,7 +60,6 @@ function get_user_tasks($conn, $user_id)
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {
-        $error = mysqli_error($conn);
         show_error(mysqli_error($conn));
     }
 
@@ -50,18 +68,18 @@ function get_user_tasks($conn, $user_id)
 
 // запрос для получения имени текущего пользователя.
 
-function get_username ($conn, $user_id) {
-    $user_id = intval($user_id);
-    $sql = "SELECT login FROM user WHERE id = $user_id";
-    $result = mysqli_query($conn, $sql);
-
-    if (!$result) {
-        $error = mysqli_error($conn);
-        show_error(mysqli_error($conn));
-    }
-
-    return mysqli_fetch_assoc($result);
-}
+//function get_username ($conn, $user_id) {
+//    $user_id = intval($user_id);
+//    $sql = "SELECT login FROM user WHERE id = $user_id";
+//    $result = mysqli_query($conn, $sql);
+//
+//    if (!$result) {
+//        $error = mysqli_error($conn);
+//        show_error(mysqli_error($conn));
+//    }
+//
+//    return mysqli_fetch_assoc($result);
+//}
 
 /**
  * Проверка на существование проекта по id
@@ -74,6 +92,32 @@ function check_user_project_id($conn, $project_id, $user_id)
 {
     $project_id = mysqli_real_escape_string($conn, $project_id);
     $sql = "SELECT id FROM project WHERE id = $project_id AND user_id = $user_id";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+        $id = mysqli_fetch_assoc($result);
+
+        if ($id) {
+            return true;
+        }
+
+        else return false;
+    }
+
+    show_error(mysqli_error($conn));
+}
+
+/**
+ * Проверка на существование таски по id
+ *
+ * @param  mysqli $conn
+ * @param  int $task_id
+ * @return boolean
+ */
+function check_exist_task_id($conn, $task_id, $user_id)
+{
+    $project_id = mysqli_real_escape_string($conn, $task_id);
+    $sql = "SELECT id FROM task WHERE id = $task_id AND user_id = $user_id";
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
@@ -227,3 +271,34 @@ function check_exist_user_project ($conn, $user_id, $project_name) {
     return (bool) mysqli_fetch_assoc($result);
 }
 
+//===== tasks
+
+function complete_task($conn, $task_id)
+{
+    $task_id = mysqli_real_escape_string($conn, $task_id);
+    $sql = "UPDATE task SET is_complete = 1 WHERE id = $task_id";
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        show_error('complete_task ' . mysqli_error($conn));
+    }
+}
+
+/**
+ * Отмечает что задача не выполнена
+ *
+ * @param  mysqli $conn
+ * @param  array $project_name
+ * @param  array $user_id
+ * @return void
+ */
+function remove_complete_task($conn, $task_id)
+{
+    $task_id = mysqli_real_escape_string($conn, $task_id);
+    $sql = "UPDATE task SET is_complete = 0 WHERE id = $task_id";
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        show_error('complete_task ' . mysqli_error($conn));
+    }
+}
