@@ -1,0 +1,7 @@
+{
+    "name": "rinceoir/doingsdone",
+    "type": "project",
+    "require": {
+        "symfony/mailer": "^6.0"
+    }
+}

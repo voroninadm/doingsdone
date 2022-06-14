@@ -1,6 +1,5 @@
 <div class="content">
 
-    <!-- include projects-nav component -->
     <?= include_component('projects-nav.php', ['projects' => $projects]); ?>
 
     <main class="content__main">
@@ -14,10 +13,10 @@
 
         <div class="tasks-controls">
             <nav class="tasks-switch">
-                <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-                <a href="?filter=today" class="tasks-switch__item">Повестка дня</a>
-                <a href="?filter=tomorrow" class="tasks-switch__item">Завтра</a>
-                <a href="?filter=out_of_date" class="tasks-switch__item">Просроченные</a>
+                <a href="/" class="tasks-switch__item <?= (!$filter) ? 'tasks-switch__item--active' : ''?>">Все задачи</a>
+                <a href="?filter=today" class="tasks-switch__item <?= $filter == 'today' ? 'tasks-switch__item--active' : ''  ?>">Повестка дня</a>
+                <a href="?filter=tomorrow" class="tasks-switch__item <?= $filter == 'tomorrow' ? 'tasks-switch__item--active' : ''  ?>">Завтра</a>
+                <a href="?filter=out_of_date" class="tasks-switch__item <?= $filter == 'out_of_date' ? 'tasks-switch__item--active' : ''  ?>">Просроченные</a>
             </nav>
 
             <label class="checkbox">
@@ -33,19 +32,19 @@
         <table class="tasks">
 
             <?php if (!$tasks && !$search) : ?>
-                <span>У вас еще нет ни одной задачи</span>
+                <span>У вас нет актуальных задач</span>
             <? elseif (!$tasks && $search) : ?>
                 <span>Ничего не найдено по вашему запросу</span>
             <? endif; ?>
 
             <?php foreach ($tasks as $task) : ?>
 
-                <tr class="tasks__item task <?= $task['is_complete'] ? 'task--completed' : ''; ?> <?= get_hours_to_deadline($task['deadline']) ? 'task--important' : ''; ?>">
+                <tr class="tasks__item task <?= $task['is_complete'] ? 'task--completed' : ''; ?> <?= get_hours_to_deadline($task['deadline'], $task['is_complete']) ? 'task--important' : ''; ?>">
                     <td class="task__select">
                         <label class="checkbox task__checkbox">
                             <input class="checkbox__input visually-hidden task__checkbox" type="checkbox"
                                    value="<?= $task['id'] ?>"
-                                <?= $show_completed_tasks ? 'checked' : '' ?>
+                                <?= ($show_completed_tasks && $task['is_complete']) ? 'checked' : '' ?>
                             >
                             <span class="checkbox__text">
               <?= esc($task['name']) ?>

@@ -2,28 +2,34 @@
 
 /**
  * Calc project tasks in array
- * @param  array $tasks
- * @param  string $project - value of current project
+ * @param array $tasks
+ * @param string $project - value of current project
  * @return int
  */
-function get_project_tasks (array $tasks, $project) {
+function get_project_tasks(array $tasks, $project)
+{
     $count = 0;
     foreach ($tasks as $task) {
         if ($task['category'] == $project) {
-            $count ++;
+            $count++;
         }
     }
     return $count;
-};
+}
+
+;
 
 /**
  * prevent XSS
  * @param string $string - input from user
  * @return string
  */
-function esc ($string) {
+function esc($string)
+{
     return htmlspecialchars($string);
-};
+}
+
+;
 
 
 /**
@@ -33,9 +39,10 @@ function esc ($string) {
  * @return boolean if $date is set +or
  * @return null
  */
-function get_hours_to_deadline($date) {
-    if ($date) {
-        $diff = floor((strtotime($date) - time()) / 3600 );
+function get_hours_to_deadline($date, $is_complete_task)
+{
+    if ($date && !$is_complete_task) {
+        $diff = floor((strtotime($date) - time()) / 3600);
         return ($diff < 24);
     }
 
@@ -43,7 +50,8 @@ function get_hours_to_deadline($date) {
 }
 
 
-function count_str_length($string, $min, $max) {
+function count_str_length($string, $min, $max)
+{
     if ($string) {
         $len = strlen($string);
         if ($len >= $min and $len <= $max) {
@@ -56,7 +64,7 @@ function count_str_length($string, $min, $max) {
 /**
  * проверка даты. Дата должна быть больше или роавна текущей в формате Y-m-d
  *
- * @param  string $date
+ * @param string $date
  * @return bool
  */
 function check_correct_date($date)
@@ -68,11 +76,38 @@ function get_user_no_completed_tasks($tasks)
 {
     $no_completed_tasks = [];
 
-    foreach($tasks as $task) {
+    foreach ($tasks as $task) {
         if (!$task['is_complete']) {
             $no_completed_tasks[] = $task;
         }
     }
 
     return $no_completed_tasks;
+}
+
+/** Filtering array of tasks by deadline date
+ *
+ * @param array $tasks - array of tasks
+ * @param string $filter_date - date to filter (today, tomorrow, out_of_date)
+ * @return array
+ */
+function get_filtered_tasks($tasks, $filter_date)
+{
+    $result = [];
+    $today = date('Y-m-d');
+    $tomorrow = date('Y-m-d', strtotime('tomorrow'));
+
+    foreach ($tasks as $task) {
+        $deadline = date('Y-m-d', strtotime($task['deadline']));
+        if ($filter_date == 'today') {
+            $deadline === $today ? $result[] = $task : null;
+        }
+        elseif ($filter_date == 'tomorrow') {
+            $deadline == $tomorrow ? $result[] = $task : null;
+        }
+        elseif ($filter_date == 'out_of_date') {
+            $deadline < $today ? $result[] = $task : null;
+        }
+    }
+    return $result;
 }

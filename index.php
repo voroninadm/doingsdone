@@ -29,8 +29,18 @@ if ($search) {
     $tasks = get_search_results($conn, $search);
 }
 
-//tasks
+//check filter
+$filter = filter_input(INPUT_GET, 'filter') ?? null;
 
+if ($filter === 'today') {
+    $tasks = get_filtered_tasks($tasks, $filter);
+} elseif ($filter === 'tomorrow') {
+    $tasks = get_filtered_tasks($tasks, $filter);
+} elseif ($filter === 'out_of_date') {
+    $tasks = get_filtered_tasks($tasks, $filter);
+}
+
+//tasks
 $task_id = filter_input(INPUT_GET, 'task_id', FILTER_SANITIZE_NUMBER_INT);
 $task_check = filter_input(INPUT_GET, 'check', FILTER_SANITIZE_NUMBER_INT);
 
@@ -60,7 +70,8 @@ if ($project_id && !check_user_project_id($conn, $project_id, $user_id)) {
         'tasks' => $tasks,
         'project_id' => $project_id,
         'search' => $search ?? null,
-        'show_completed_tasks' => $show_completed_tasks
+        'show_completed_tasks' => $show_completed_tasks,
+        'filter' => $filter
     ]);
 };
 
