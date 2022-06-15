@@ -2,7 +2,6 @@
 
 require_once 'php/init.php';
 
-
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -15,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['email'] = "Поле не заполнено";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "e-mail должен быть корректно заполнен";
-    } elseif (!check_registrated_user_email($conn, $email)) {
+    } elseif (!check_user_email($conn, $email)) {
         $errors['email'] = 'Пользователь с таким e-mail не зарегистрирован';
     }
 
@@ -23,10 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['password'] = 'Поле не заполнено';
     }
 
-    array_filter($errors);
-
-
-    $user = check_exist_user($conn, $email);
+    // check to authorize, open session
+    $user = check_auth_user($conn, $email);
 
     if (empty($errors) && $user) {
         if (password_verify($password, $user['password'])) {
@@ -36,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+    //redirect to main page if user is auth and session is started
     if (isset($_SESSION['user'])) {
         header('Location: index.php');
         exit();

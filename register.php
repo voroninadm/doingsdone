@@ -4,7 +4,7 @@ require_once 'php/init.php';
 
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //validating
     $email = trim(filter_input(INPUT_POST, 'email'));
@@ -15,23 +15,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['email'] = "Поле не заполнено";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "e-mail должен быть корректно заполнен";
-    } else if (check_registrated_user_email($conn, $email)) {
+    } else if (check_user_email($conn, $email)) {
         $errors['email'] = "Пользователь с тамим e-mail уже зарегистрирован";
     }
 
     if (!$password) {
         $errors['password'] = 'Поле не заполнено';
-    } elseif (!count_str_length($password, 3, 50)) {
-        $errors['password'] = "Длина пароля не менее 3 символов";
+    } elseif (!count_str_length($password, 8, 30)) {
+        $errors['password'] = "Не менее 8 и не более 30 ";
     }
 
     if (!$login) {
         $errors['login'] = 'Поле не заполнено';
     } elseif (!count_str_length($login, 2, 30)) {
-        $errors['login'] = "Не менее 2х и не более 30 символов";
+        $errors['login'] = "Не менее 2 и не более 30 символов";
     }
-
-    array_filter($errors);
 
     if (empty($errors)) {
         $password = password_hash($password, PASSWORD_DEFAULT);

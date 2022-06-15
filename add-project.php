@@ -21,12 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!$project_name) {
         $errors['project_name'] = 'Поле не заполнено';
     } elseif (!count_str_length($project_name, 3, 30)) {
-        $errors['project_name'] = 'Слишком длинное имя проекта';
+        $errors['project_name'] = 'Количество символов от 3 до 120';
     } elseif (check_exist_user_project($conn, $user_id, $project_name)) {
         $errors['project_name'] = 'Проект с таким именем уже существует';
     }
-
-    array_filter($errors);
 
     if (empty($errors)) {
         add_new_project($conn, $project_name, $user_id);
@@ -44,7 +42,7 @@ $content = include_template('form-project.php', [
 
 //layout to main page with main page template
 $main_layout = include_template('layout.php', [
-    'page_title' => 'Дела в порядке',
+    'page_title' => 'Дела в порядке | Добавление проекта',
     'current_user' => $current_user,
     'content' => $content
 ]);

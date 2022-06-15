@@ -1,27 +1,8 @@
 <?php
 
 /**
- * Calc project tasks in array
- * @param array $tasks
- * @param string $project - value of current project
- * @return int
- */
-function get_project_tasks(array $tasks, $project)
-{
-    $count = 0;
-    foreach ($tasks as $task) {
-        if ($task['category'] == $project) {
-            $count++;
-        }
-    }
-    return $count;
-}
-
-;
-
-/**
- * prevent XSS
- * @param string $string - input from user
+ * Замена введенных значений на безопасные, от XSS-атак
+ * @param string $string - строка введенных данных
  * @return string
  */
 function esc($string)
@@ -29,14 +10,13 @@ function esc($string)
     return htmlspecialchars($string);
 }
 
-;
-
-
 /**
- * check time to project deadline
- * @param int 24 - time in hours to make it sensitive
- * @param int 3600 - convert seconds to hours
- * @return boolean if $date is set +or
+ * Проверка времени таски до дедлайна
+ * @param string $date - дата дедлайна таски
+ * @param boolean $is_complete_task - выполнена таска или нет
+ * @param int 24 - значение в часах для предупреждения
+ * @param int 3600 - конвертируем секунды в часы
+ * @return boolean - если задана $date
  * @return null
  */
 function get_hours_to_deadline($date, $is_complete_task)
@@ -49,7 +29,12 @@ function get_hours_to_deadline($date, $is_complete_task)
     return null;
 }
 
-
+/** Соответствие количества символов в строке заданному диапазону
+ * @param string $string - строка данных
+ * @param int $min - минимальное количество символов
+ * @param int $max - максимальное количество символов
+ * @return bool
+ */
 function count_str_length($string, $min, $max)
 {
     if ($string) {
@@ -58,13 +43,14 @@ function count_str_length($string, $min, $max)
             return true;
         }
     }
+
     return false;
 }
 
 /**
- * проверка даты. Дата должна быть больше или роавна текущей в формате Y-m-d
- *
- * @param string $date
+ * Проверка даты для добавления задачи.
+ * Дата должна быть больше или роавна текущей в формате Y-m-d
+ * @param string $date - дата для проверки
  * @return bool
  */
 function check_correct_date($date)
@@ -72,6 +58,11 @@ function check_correct_date($date)
     return date('Y-m-d', strtotime($date)) >= date('Y-m-d');
 }
 
+/**
+ * Фильтрация невывполненных таск пользователя
+ * @param array $tasks - список всех таск пользователя
+ * @return array
+ */
 function get_user_no_completed_tasks($tasks)
 {
     $no_completed_tasks = [];
@@ -85,10 +76,10 @@ function get_user_no_completed_tasks($tasks)
     return $no_completed_tasks;
 }
 
-/** Filtering array of tasks by deadline date
- *
- * @param array $tasks - array of tasks
- * @param string $filter_date - date to filter (today, tomorrow, out_of_date)
+/**
+ * Фильтрация массива таск по дате дедлайна
+ * @param array $tasks - массив таск
+ * @param string $filter_date - даты для фильтра => [today, tomorrow, out_of_date]
  * @return array
  */
 function get_filtered_tasks($tasks, $filter_date)
@@ -101,11 +92,9 @@ function get_filtered_tasks($tasks, $filter_date)
         $deadline = date('Y-m-d', strtotime($task['deadline']));
         if ($filter_date == 'today') {
             $deadline === $today ? $result[] = $task : null;
-        }
-        elseif ($filter_date == 'tomorrow') {
+        } elseif ($filter_date == 'tomorrow') {
             $deadline == $tomorrow ? $result[] = $task : null;
-        }
-        elseif ($filter_date == 'out_of_date') {
+        } elseif ($filter_date == 'out_of_date') {
             $deadline < $today ? $result[] = $task : null;
         }
     }

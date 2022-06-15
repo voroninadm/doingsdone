@@ -4,7 +4,7 @@ require_once 'php/init.php';
 
 //check user is auth
 if (!isset($_SESSION['user'])) {
-    header("Location: /guest.php");
+    header("Location: guest.php");
     exit();
 }
 
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //validating
     $task_name = trim(filter_input(INPUT_POST, 'name'));
-    $project_id = filter_input(INPUT_POST, 'project');
+    $project_id = trim(filter_input(INPUT_POST, 'project'));
     $deadline = filter_input(INPUT_POST, 'date') ?? null;
 
     if (!$task_name) {
@@ -36,17 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //is_date_valid - function from helpers.php
     if ($deadline && !is_date_valid($deadline)) {
-        $errors['deadline'] = 'Неправильный формат даты';
+        $errors['deadline'] = 'Некорректный формат даты';
     } elseif ($deadline && !check_correct_date($deadline)) {
         $errors['deadline'] = 'Не получится добавить задачу в прошлое';
     }
 
-    array_filter($errors);
-
     if ($_FILES['file']['name']) {
         $tmp_name = $_FILES['file']['tmp_name'];
         $file_name = $_FILES['file']['name'];
-//        $file_name = uniqid() . '_' . $file_name;
         $file_path = __DIR__ . '/uploads/';
 
         move_uploaded_file($_FILES['file']['tmp_name'], $file_path . $file_name);
@@ -61,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: index.php');
         exit();
     }
-
 };
 
 
@@ -76,7 +72,7 @@ $content = include_template('form-task.php', [
 
 //layout to main page with main page template
 $main_layout = include_template('layout.php', [
-    'page_title' => 'Дела в порядке',
+    'page_title' => 'Дела в порядке | Добавление задачи',
     'current_user' => $current_user,
     'content' => $content
 ]);

@@ -29,15 +29,15 @@ foreach ($users as $user) {
 
     foreach ($user['tasks'] as $task) {
         $date = strtotime($task['deadline']);
-        $tasks[]= $task['name'] . ' на ' . date('d', $date) . ' ' . date('M', $date) . '<br>';
+        $tasks[]= $task['name'] . ' на ' . date('d', $date) . ' ' . date('M', $date);
     }
 
-    $to_do = include_component('notify.php', [
+    $to_do_template = include_component('notify.php', [
         'user_login' => $user['login'],
         'tasks' => $tasks
     ]);
 
-    $message->html($to_do);
+    $message->html($to_do_template);
 
     $mailer = new Mailer($transport);
     $mailer->send($message);

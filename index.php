@@ -2,22 +2,23 @@
 
 require_once 'php/init.php';
 
+//check user is auth
 if (!isset($_SESSION['user'])) {
     header("Location: /guest.php");
     exit();
 }
 
+// start configs
 $user_name = $_SESSION['user'];
 $user_id = $user_name['id'];
-$projects = get_current_projects($conn, $user_id);
+$projects = get_projects($conn, $user_id);
 $show_completed_tasks = filter_input(INPUT_GET, 'show_completed', FILTER_SANITIZE_NUMBER_INT);
 
-
-//get project_id
+//showing all tasks or project tasks
 $project_id = filter_input(INPUT_GET, 'project_id');
 
-if ($project_id && check_user_project_id($conn, $project_id,$user_id)) {
-    $tasks = get_project_user_tasks($conn, $user_id, $project_id);
+if ($project_id && check_user_project_id($conn, $project_id, $user_id)) {
+    $tasks = get_user_tasks($conn, $user_id, $project_id);
 } else {
     $tasks = get_user_tasks($conn, $user_id);
 }
@@ -40,7 +41,7 @@ if ($filter === 'today') {
     $tasks = get_filtered_tasks($tasks, $filter);
 }
 
-//tasks
+//tasks complele/uncomplete
 $task_id = filter_input(INPUT_GET, 'task_id', FILTER_SANITIZE_NUMBER_INT);
 $task_check = filter_input(INPUT_GET, 'check', FILTER_SANITIZE_NUMBER_INT);
 
