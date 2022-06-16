@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //validating
     $task_name = trim(filter_input(INPUT_POST, 'name'));
     $project_id = trim(filter_input(INPUT_POST, 'project'));
-    $deadline = filter_input(INPUT_POST, 'date') ?? null;
+    $deadline = filter_input(INPUT_POST, 'date');
 
     if (!$task_name) {
         $errors['task_name'] = "Поле не заполнено";
@@ -34,6 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['project_id'] = "Выберите существующий проект";
     }
 
+    if (!$deadline) {
+        $deadline = null;
+    }
+
     //is_date_valid - function from helpers.php
     if ($deadline && !is_date_valid($deadline)) {
         $errors['deadline'] = 'Некорректный формат даты';
@@ -44,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_FILES['file']['name']) {
         $tmp_name = $_FILES['file']['tmp_name'];
         $file_name = $_FILES['file']['name'];
-        $file_path = __DIR__ . '/uploads/';
+        $file_path = UPLOAD_PATH;
 
-        move_uploaded_file($_FILES['file']['tmp_name'], $file_path . $file_name);
-        $file_url = 'uploads/' . $file_name;
+        move_uploaded_file($_FILES['file']['tmp_name'], "$file_path/$file_name");
+        $file_url = "$file_path/$file_name";
     } else {
         $file_url = null;
     }

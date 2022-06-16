@@ -9,9 +9,7 @@ require_once 'php/models.php';
 session_start();
 $current_user = $_SESSION['user'] ?? NULL;
 
-define('CACHE_DIR', basename(__DIR__ . DIRECTORY_SEPARATOR . 'cache'));
-define('UPLOAD_PATH', basename(__DIR__ . DIRECTORY_SEPARATOR . 'uploads'));
-
+define('UPLOAD_PATH', basename( __DIR__ . '/uploads'));
 
 $db_cfg = array_values($db);
 $conn = mysqli_connect(...$db_cfg);

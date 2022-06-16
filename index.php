@@ -59,6 +59,16 @@ if (!$show_completed_tasks) {
     $tasks = get_user_no_completed_tasks($tasks);
 }
 
+//pagination
+$tasks_quantity = count($tasks);
+$tasks_limit = 8;
+$page = intval(filter_input(INPUT_GET, 'page')) ?: 1;
+$offset = ($page - 1) * $tasks_limit;
+$pages = $tasks_quantity / $tasks_limit;
+$pages_total = ceil($pages);
+
+$tasks = array_slice($tasks, $offset, $tasks_limit, true);
+
 // rendering to page
 if ($project_id && !check_user_project_id($conn, $project_id, $user_id)) {
     http_response_code(404);
@@ -72,7 +82,9 @@ if ($project_id && !check_user_project_id($conn, $project_id, $user_id)) {
         'project_id' => $project_id,
         'search' => $search ?? null,
         'show_completed_tasks' => $show_completed_tasks,
-        'filter' => $filter
+        'filter' => $filter,
+        'pages_total' => $pages_total,
+        'page' => $page
     ]);
 };
 

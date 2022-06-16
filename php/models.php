@@ -52,7 +52,7 @@ function get_user_tasks($conn, $user_id, $project_id = null)
     if (!$project_id) {
         $sql = "SELECT * FROM task WHERE user_id = $user_id ORDER BY deadline ASC";
     } else {
-        $sql = "SELECT * FROM task WHERE user_id = $user_id AND project_id = $project_id ORDER BY deadline ASC";
+        $sql = "SELECT * FROM task WHERE user_id = $user_id AND project_id = $project_id  ORDER BY deadline ASC";
     }
     $result = mysqli_query($conn, $sql);
 

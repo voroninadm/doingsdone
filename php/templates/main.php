@@ -58,14 +58,22 @@
                     </td>
 
                     <td class="task__file">
-                        <a class="download-link" href="<?= $task['file_url'] ?>"><?= $task['file_url'] ?></a>
+                        <a class=" <?= $task['file_url'] ? 'download-link' : '' ?>"
+                           href="<?= $task['file_url'] ?>"><?= $task['file_url'] ?></a>
                     </td>
 
                     <td class="task__date">
-                        <?= date('d.m.Y', strtotime(esc($task['deadline']))) ?>
+                        <?= $task['deadline'] ? date('d.m.Y', strtotime(esc($task['deadline']))) : null ?>
                     </td>
                 </tr>
             <? endforeach ?>
         </table>
+
+        <?= ($pages_total > 1)
+            ? include_component('pagination.php', ['pages_total' => $pages_total, 'page' => $page])
+            : null;
+        ?>
+
+
     </main>
 </div>
