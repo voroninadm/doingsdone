@@ -4,7 +4,7 @@
     <ul>
         <?php foreach ($tasks as $task) : ?>
         <li><?= $task ?></li>
-        <? endforeach; ?>
+        <?php endforeach; ?>
     </ul>
     <p>Постарайтесь выполнить свои задачи в срок!</p>
 </section>

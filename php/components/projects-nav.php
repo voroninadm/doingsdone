@@ -4,7 +4,7 @@
   <ul class="main-navigation__list">
       <?php if (empty($projects)) : ?>
       <p>У Вас еще нет проектов</p>
-      <? endif; ?>
+      <?php endif; ?>
     <?php foreach ($projects as $project) : ?>
     <li class="main-navigation__list-item <?= $project['id'] == $project_id ? 'main-navigation__list-item--active' : ''; ?>">
       <a class="main-navigation__list-item-link" href="index.php?project_id=<?= $project['id']; ?>">
@@ -14,7 +14,7 @@
         <?= esc($project['count_tasks']) ?>
       </span>
     </li>
-    <? endforeach ?>
+    <?php endforeach ?>
   </ul>
 </nav>
 <a class="button button--transparent button--plus content__side-button" href="add-project.php">Добавить проект</a>

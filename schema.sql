@@ -31,8 +31,8 @@ CREATE TABLE task (
   date_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   name VARCHAR(128) NOT NULL,
   is_complete BOOLEAN DEFAULT 0,
-  file_url VARCHAR(255) NULL DEFAULT NULL,
-  deadline TIMESTAMP DEFAULT NULL,
+  file_url VARCHAR(255) NULL,
+  deadline TIMESTAMP NULL,
   project_id INT NOT NULL,
   user_id INT NOT NULL,
 

@@ -15,7 +15,7 @@ $projects = get_projects($conn, $user_id);
 $show_completed_tasks = filter_input(INPUT_GET, 'show_completed', FILTER_SANITIZE_NUMBER_INT);
 
 //showing all tasks or project tasks
-$project_id = filter_input(INPUT_GET, 'project_id');
+$project_id = filter_input(INPUT_GET, 'project_id') ?? null;
 
 if ($project_id && check_user_project_id($conn, $project_id, $user_id)) {
     $tasks = get_user_tasks($conn, $user_id, $project_id);
@@ -31,28 +31,20 @@ if ($search) {
 }
 
 //check filter
-$filter = filter_input(INPUT_GET, 'filter') ?? null;
-
-if ($filter === 'today') {
-    $tasks = get_filtered_tasks($tasks, $filter);
-} elseif ($filter === 'tomorrow') {
-    $tasks = get_filtered_tasks($tasks, $filter);
-} elseif ($filter === 'out_of_date') {
+$filter = filter_input(INPUT_GET, 'filter');
+if (isset($filter)) {
     $tasks = get_filtered_tasks($tasks, $filter);
 }
+
 
 //tasks complele/uncomplete
 $task_id = filter_input(INPUT_GET, 'task_id', FILTER_SANITIZE_NUMBER_INT);
 $task_check = filter_input(INPUT_GET, 'check', FILTER_SANITIZE_NUMBER_INT);
 
 if ($task_id && check_exist_task_id($conn, $task_id, $user_id)) {
-    if ($task_check) {
-        complete_task($conn, $task_id);
-        header('Location: index.php');
-    } else {
-        remove_complete_task($conn, $task_id);
-        header('Location: index.php');
-    }
+    $task_check ? complete_task($conn, $task_id) : remove_complete_task($conn, $task_id);
+    header('Location: index.php');
+    exit();
 }
 
 if (!$show_completed_tasks) {

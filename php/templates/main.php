@@ -1,6 +1,9 @@
 <div class="content">
 
-    <?= include_component('projects-nav.php', ['projects' => $projects]); ?>
+    <?= include_component('projects-nav.php', [
+        'projects' => $projects,
+        'project_id' => $project_id]);
+    ?>
 
     <main class="content__main">
         <h2 class="content__main-heading">Список задач</h2>
@@ -38,9 +41,9 @@
 
             <?php if (!$tasks && !$search) : ?>
                 <span>У вас нет актуальных задач</span>
-            <? elseif (!$tasks && $search) : ?>
+            <?php elseif (!$tasks && $search) : ?>
                 <span>Ничего не найдено по вашему запросу</span>
-            <? endif; ?>
+            <?php endif; ?>
 
             <?php foreach ($tasks as $task) : ?>
 
@@ -66,7 +69,7 @@
                         <?= $task['deadline'] ? date('d.m.Y', strtotime(esc($task['deadline']))) : null ?>
                     </td>
                 </tr>
-            <? endforeach ?>
+            <?php endforeach ?>
         </table>
 
         <?= ($pages_total > 1)

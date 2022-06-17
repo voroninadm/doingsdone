@@ -25,13 +25,13 @@
                     <div class="main-header__side-item user-menu">
                         <div class="user-menu__data">
 
-                            <p><?= $current_user['login'] ?></p>
+                            <p><?= esc($current_user['login']) ?></p>
                             <a href="logout.php">Выйти</a>
                         </div>
                     </div>
                 <?php else : ?>
                 <a class="main-header__side-item button button--transparent" href="auth.php">Войти</a>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
         </header>
 
@@ -49,7 +49,7 @@
         </div>
         <?php if (isset($current_user)) : ?>
         <a class="main-footer__button button button--plus" href="add-task.php">Добавить задачу</a>'
-        <? endif; ?>
+        <?php endif; ?>
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
             <a class="social__link social__link--vkontakte" href="https://vk.com/htmlacademy" target="_blank"  rel="noreferrer">

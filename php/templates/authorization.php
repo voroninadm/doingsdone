@@ -19,7 +19,7 @@
 
                 <?php if (isset($errors['email'])) : ?>
                 <p class="form__message"><?= $errors['email'] ?></p>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
 
             <div class="form__row">
@@ -32,7 +32,7 @@
 
                 <?php if (isset($errors['password'])) : ?>
                     <p class="form__message"><?= $errors['password'] ?></p>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
 
             <div class="form__row form__row--controls">

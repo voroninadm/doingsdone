@@ -18,7 +18,7 @@
 
                 <?php if (isset($errors['email'])) : ?>
                     <p class="form__message"><?= $errors['email'] ?></p>
-                <? endif ?>
+                <?php endif ?>
             </div>
 
             <div class="form__row">
@@ -30,7 +30,7 @@
 
                 <?php if (isset($errors['password'])) : ?>
                     <p class="form__message"><?= $errors['password'] ?></p>
-                <? endif ?>
+                <?php endif ?>
             </div>
 
             <div class="form__row">
@@ -42,13 +42,13 @@
 
                 <?php if (isset($errors['login'])) : ?>
                     <p class="form__message"><?= $errors['login'] ?></p>
-                <? endif ?>
+                <?php endif ?>
             </div>
 
             <div class="form__row form__row--controls">
                 <?php if (!empty($errors)) : ?>
                     <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
-                <? endif ?>
+                <?php endif ?>
 
                 <input class="button" type="submit" name="" value="Зарегистрироваться">
             </div>
