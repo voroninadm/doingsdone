@@ -6,7 +6,7 @@
       <p>У Вас еще нет проектов</p>
       <?php endif; ?>
     <?php foreach ($projects as $project) : ?>
-    <li class="main-navigation__list-item <?= $project['id'] == $project_id ? 'main-navigation__list-item--active' : ''; ?>">
+    <li class="main-navigation__list-item <?= $project['id'] === $project_id ? 'main-navigation__list-item--active' : ''; ?>">
       <a class="main-navigation__list-item-link" href="index.php?project_id=<?= $project['id']; ?>">
         <?= esc($project['name']) ?>
       </a>

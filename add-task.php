@@ -13,48 +13,16 @@ $user_name = $_SESSION['user'];
 $user_id = $user_name['id'];
 $projects = get_projects($conn, $user_id);
 
-$errors = [];
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //validating
     $task_name = trim(filter_input(INPUT_POST, 'name'));
     $project_id = trim(filter_input(INPUT_POST, 'project'));
-    $deadline = filter_input(INPUT_POST, 'date');
+    $deadline = filter_input(INPUT_POST, 'date') ?: null;
+    $file = $_FILES['file']['name'] ?: null;
+    $file_url = $file ? upload_task_file($_FILES) : null;
 
-    if (!$task_name) {
-        $errors['task_name'] = "Поле не заполнено";
-    } elseif (!count_str_length($task_name, 5, 120)) {
-        $errors['task_name'] = 'Количество символов от 5 до 120';
-    }
-
-    if (!$project_id) {
-        $errors['project_id'] = 'Поле не заполнено';
-    } elseif (!check_user_project_id($conn, $project_id, $user_id)) {
-        $errors['project_id'] = "Выберите существующий проект";
-    }
-
-    if (!$deadline) {
-        $deadline = null;
-    }
-
-    //is_date_valid - function from helpers.php
-    if ($deadline && !is_date_valid($deadline)) {
-        $errors['deadline'] = 'Некорректный формат даты';
-    } elseif ($deadline && !check_correct_date($deadline)) {
-        $errors['deadline'] = 'Не получится добавить задачу в прошлое';
-    }
-
-    if ($_FILES['file']['name']) {
-        $tmp_name = $_FILES['file']['tmp_name'];
-        $file_name = $_FILES['file']['name'];
-        $file_path = UPLOAD_PATH;
-
-        move_uploaded_file($_FILES['file']['tmp_name'], "$file_path/$file_name");
-        $file_url = "$file_path/$file_name";
-    } else {
-        $file_url = null;
-    }
+    $errors = validate_add_task_form ($conn, $user_id, $task_name, $project_id, $deadline);
 
     if (empty($errors)) {
         add_new_task($conn, $task_name, $file_url, $deadline, $project_id, $user_id);
@@ -63,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 };
-
 
 // rendering to page
 $content = include_template('form-task.php', [

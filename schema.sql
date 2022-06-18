@@ -21,7 +21,7 @@ CREATE TABLE project (
   name VARCHAR(128) NOT NULL,
   user_id INT NOT NULL,
 
-  UNIQUE INDEX project_name (name),
+  UNIQUE INDEX project_name (name, user_id),
 
   CONSTRAINT project_fk_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
 );

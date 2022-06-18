@@ -13,18 +13,10 @@ $user_name = $_SESSION['user'];
 $user_id = $user_name['id'];
 $projects = get_projects($conn, $user_id);
 
-$errors = [];
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $project_name = trim(filter_input(INPUT_POST, 'project_name'));
 
-    if (!$project_name) {
-        $errors['project_name'] = 'Поле не заполнено';
-    } elseif (!count_str_length($project_name, 3, 30)) {
-        $errors['project_name'] = 'Количество символов от 3 до 120';
-    } elseif (check_exist_user_project($conn, $user_id, $project_name)) {
-        $errors['project_name'] = 'Проект с таким именем уже существует';
-    }
+    $errors = validate_add_project_form($conn, $user_id, $project_name);
 
     if (empty($errors)) {
         add_new_project($conn, $project_name, $user_id);

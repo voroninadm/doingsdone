@@ -1,6 +1,7 @@
 <?php
 
-date_default_timezone_set("Europe/Moscow");
+$default_time_zone = 'Europe/Moscow';
+$mysql_default_charset = 'utf8mb4';
 
 $db = [
     'host' => '127.0.0.1',

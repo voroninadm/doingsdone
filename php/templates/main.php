@@ -19,12 +19,12 @@
                 <a href="/" class="tasks-switch__item <?= (!$filter) ? 'tasks-switch__item--active' : '' ?>">Все
                     задачи</a>
                 <a href="?filter=today"
-                   class="tasks-switch__item <?= $filter == 'today' ? 'tasks-switch__item--active' : '' ?>">Повестка
+                   class="tasks-switch__item <?= $filter === 'today' ? 'tasks-switch__item--active' : '' ?>">Повестка
                     дня</a>
                 <a href="?filter=tomorrow"
-                   class="tasks-switch__item <?= $filter == 'tomorrow' ? 'tasks-switch__item--active' : '' ?>">Завтра</a>
+                   class="tasks-switch__item <?= $filter === 'tomorrow' ? 'tasks-switch__item--active' : '' ?>">Завтра</a>
                 <a href="?filter=out_of_date"
-                   class="tasks-switch__item <?= $filter == 'out_of_date' ? 'tasks-switch__item--active' : '' ?>">Просроченные</a>
+                   class="tasks-switch__item <?= $filter === 'out_of_date' ? 'tasks-switch__item--active' : '' ?>">Просроченные</a>
             </nav>
 
             <label class="checkbox">

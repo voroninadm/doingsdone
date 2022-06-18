@@ -90,13 +90,31 @@ function get_filtered_tasks($tasks, $filter_date)
 
     foreach ($tasks as $task) {
         $deadline = date('Y-m-d', strtotime($task['deadline']));
-        if ($filter_date == 'today') {
-            $deadline === $today ? $result[] = $task : null;
-        } elseif ($filter_date == 'tomorrow') {
-            $deadline == $tomorrow ? $result[] = $task : null;
-        } elseif ($filter_date == 'out_of_date') {
-            $deadline < $today ? $result[] = $task : null;
+        switch ($filter_date) {
+            case 'today' :
+                $deadline === $today ? $result[] = $task : null;
+                break;
+            case 'tomorrow' :
+                $deadline === $tomorrow ? $result[] = $task : null;
+                break;
+            case 'out_of_date' :
+                $deadline < $today ? $result[] = $task : null;
+                break;
         }
     }
     return $result;
+}
+
+/**
+ * Перенос загружаемого файла из добавляемой таски
+ * @param array $file_tmp - файл (из $_FILES)
+ * @return string - путь до файла
+ */
+function upload_task_file($file_tmp)
+{
+    $file_name = $file_tmp['file']['name'];
+    $file_path = UPLOAD_PATH;
+
+    move_uploaded_file($file_tmp['file']['tmp_name'], "$file_path/$file_name");
+    return "$file_path/$file_name";
 }

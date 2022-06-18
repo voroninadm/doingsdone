@@ -25,16 +25,12 @@ if ($project_id && check_user_project_id($conn, $project_id, $user_id)) {
 
 //check search form
 $search = trim(filter_input(INPUT_GET, 'search')) ?? null;
+$search ?? $tasks = get_search_results($conn, $search);
 
-if ($search) {
-    $tasks = get_search_results($conn, $search);
-}
 
 //check filter
-$filter = filter_input(INPUT_GET, 'filter');
-if (isset($filter)) {
-    $tasks = get_filtered_tasks($tasks, $filter);
-}
+$filter = filter_input(INPUT_GET, 'filter') ?? null;
+$filter !== null ? $tasks = get_filtered_tasks($tasks, $filter) : '';
 
 
 //tasks complele/uncomplete

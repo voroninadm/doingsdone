@@ -4,7 +4,7 @@ require_once 'php/init.php';
 
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //validating
     $email = trim(filter_input(INPUT_POST, 'email'));
