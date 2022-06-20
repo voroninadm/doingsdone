@@ -1,16 +1,20 @@
 <?php
+/**
+ * @var mysqli $conn - connect to DB
+ * @var array $user - open user session from init.php
+ * @var int $user_id - user id from open session
+ * @var string $current_user - user name from session or null for guest
+ */
 
-require_once 'php/init.php';
+require_once 'init.php';
 
 //check user is auth
-if (!isset($_SESSION['user'])) {
+if ($user === null) {
     header("Location: /guest.php");
     exit();
 }
 
 // start configs
-$user_name = $_SESSION['user'];
-$user_id = $user_name['id'];
 $projects = get_projects($conn, $user_id);
 $show_completed_tasks = filter_input(INPUT_GET, 'show_completed', FILTER_SANITIZE_NUMBER_INT);
 
@@ -33,7 +37,7 @@ $filter = filter_input(INPUT_GET, 'filter') ?? null;
 $filter !== null ? $tasks = get_filtered_tasks($tasks, $filter) : '';
 
 
-//tasks complele/uncomplete
+//tasks complete/uncomplete
 $task_id = filter_input(INPUT_GET, 'task_id', FILTER_SANITIZE_NUMBER_INT);
 $task_check = filter_input(INPUT_GET, 'check', FILTER_SANITIZE_NUMBER_INT);
 

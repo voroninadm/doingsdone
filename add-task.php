@@ -1,16 +1,20 @@
 <?php
+/**
+ * @var mysqli $conn - connect to DB
+ * @var array $user - open user session from init.php
+ * @var int $user_id - user id from open session
+ * @var string $current_user - user name from session or null for guest
+ */
 
-require_once 'php/init.php';
+require_once 'init.php';
 
 //check user is auth
-if (!isset($_SESSION['user'])) {
-    header("Location: guest.php");
+if ($user === null) {
+    header("Location: /guest.php");
     exit();
 }
 
 // start configs
-$user_name = $_SESSION['user'];
-$user_id = $user_name['id'];
 $projects = get_projects($conn, $user_id);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

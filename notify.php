@@ -1,4 +1,8 @@
 <?php
+/**
+ * @var mysqli $conn - connect to DB
+ * @var array $mailer - mailer settings
+ */
 
 //start config
 use Symfony\Component\Mailer\Transport;
@@ -6,16 +10,17 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 
 require_once 'vendor/autoload.php';
-require_once 'php/init.php';
+require_once 'init.php';
 
 $date = date('Y-m-d');
 $users = get_users_for_mailing($conn, $date);
 if (!$users) {
+    echo "Некому отправлять письма, задачи на $date не найдены" ;
     exit();
 }
 
-// Конфигурация траспорта
-$dsn = 'smtp://18d0959cf2a790:3b0aa4b31afd88@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login';
+// transport configs
+$dsn = make_dsn($mailer);
 $transport = Transport::fromDsn($dsn);
 
 // Формирование сообщения
@@ -40,11 +45,10 @@ foreach ($users as $user) {
     $message->html($to_do_template);
 
     $mailer = new Mailer($transport);
-    $mailer->send($message);
-
-    if (!$mailer) {
-        echo ('Сообщение на ящик' . $user['email'] . 'не было отправлено!');
-    } else {
+    try {
+        $mailer->send($message);
         echo ('Сообщение успешно отправлено на ящик ' . $user['email']);
+    } catch (\Symfony\Component\Mailer\Exception\TransportExceptionInterface $e) {
+        echo 'Сообщение на ящик ' . $user['email'] . ' не было отправлено! Причина: ',  $e->getMessage(), "\n";
     }
 }

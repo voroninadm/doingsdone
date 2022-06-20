@@ -47,7 +47,7 @@
 
             <?php foreach ($tasks as $task) : ?>
 
-                <tr class="tasks__item task <?= $task['is_complete'] ? 'task--completed' : ''; ?> <?= get_hours_to_deadline($task['deadline'],
+                <tr class="tasks__item task <?= $task['is_complete'] ? 'task--completed' : ''; ?> <?= check_hours_to_deadline($task['deadline'],
                     $task['is_complete']) ? 'task--important' : ''; ?>">
                     <td class="task__select">
                         <label class="checkbox task__checkbox">

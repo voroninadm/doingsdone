@@ -1,6 +1,11 @@
 <?php
 
-require_once 'php/init.php';
+/**
+ * @var mysqli $conn - connect to DB
+ * @var string|null $current_user - user name from session or null for guest
+ */
+
+require_once 'init.php';
 
 $errors = [];
 
